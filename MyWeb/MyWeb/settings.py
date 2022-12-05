@@ -10,12 +10,13 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 
-import ssl
 from pathlib import Path
+import os
+from dotenv import load_dotenv
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
+load_dotenv()
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
@@ -31,11 +32,11 @@ ALLOWED_HOSTS = []
 AUTHENTICATION_BACKENDS = (
     "myApp.authentication.LDAPBackend",
     # "django_python3_ldap.auth.LDAPBackend",
-    # "django.contrib.auth.backends.ModelBackend",
+    "django.contrib.auth.backends.ModelBackend",
 )
 
 # The URL of the LDAP server(s).  List multiple servers for high availability ServerPool connection.
-LDAP_AUTH_URL = ["ldap://localhost:8389"]
+LDAP_AUTH_URL = [os.getenv("LDAP_URL")]
 
 LDAP_AUTH_USER_LOOKUP_FIELDS = ("username",)
 
@@ -102,6 +103,8 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+
+    'bootstrap4',
 
     'django_python3_ldap',
     'myApp.apps.MyappConfig',

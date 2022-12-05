@@ -1,0 +1,53 @@
+<!-- templates/home.html -->
+{% extends 'base.html' %}
+
+{% block title %} Dynmaic drop down{% endblock %}
+
+{% block content %}
+
+{% csrf_token %}
+<div class="col-md-6">
+    <div class="form-group">
+        <label for="inputStatus">Country</label>
+        <select id="question-subject" class="form-control-sm custom-select">
+            <option selected disabled>Choose a Country</option>
+            {% for subject in subjects%}
+            <option value="{{subject.key}}">{{subject.value}}</option>
+            {% endfor %}
+        </select>
+    </div>
+</div>
+<div class="col-md-6">
+    <div class="form-group">
+        <label for="inputStatus">City</label>
+        <select id="question-topic" class="form-control-sm custom-select" name="topic">
+            <option selected disabled>Choose a City</option>
+        </select>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
+    crossorigin="anonymous"></script>
+<script>
+    $("#question-subject").change(function () {
+        const subjectId = $(this).val();  // get the selected subject ID from the HTML dropdown list 
+        $.ajax({                       // initialize an AJAX request
+            type: "POST",
+            url: '{% url "get_cities_ajax" %}',
+            data: {
+                'subject_id': subjectId,       // add the country id to the POST parameters
+                'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val(),
+            },
+            success: function (data) {   // `data` is from `get_topics_ajax` view function
+                let html_data = '<option value="">---------</option>';
+                data.forEach(function (data) {
+                    html_data += `<option value="${data.key}">${data.value}</option>`
+                });
+                $("#question-topic").html(html_data); // replace the contents of the topic input with the data that came from the server
+            }
+        });
+    });
+</script>
+
+
+{% endblock %}
