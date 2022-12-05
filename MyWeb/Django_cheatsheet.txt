@@ -1,0 +1,162 @@
+List.as_view()
+
+from django.views.generic.list import ListView
+
+class GeeksList(ListView):
+    model
+     fields
+     initial
+    context_object_name = 'book_list'   # your own name for the list as a template variable
+    queryset = Book.objects.filter(title__icontains='war')[:5] # Get 5 books containing the title war
+    #https://www.w3schools.com/django/django_queryset_filter.php
+    template_name = 'books/my_arbitrary_template_name_list.html'  # Specify your own template name/location
+    
+    success_url 
+    
+    paginate_by = 10   ##  as soon as you have more than 10 records the view will start paginating the data it sends to the template. , /catalog/books/?page=2.
+    
+    
+    def get_queryset(self, *args, **kwargs):
+        qs = super(GeeksList, self).get_queryset(*args, **kwargs)
+        qs = qs.order_by("-id")
+        return qs
+        
+        return Book.objects.filter(title__icontains='war')[:5] # Get 5 books containing the title war
+
+ # override context data
+    def get_context_data(self, *args, **kwargs):
+        context = super(GeeksDetailView,  self).get_context_data(*args, **kwargs)
+        # add extra field
+        context["category"] = "MISC"       
+        return context
+        
+        
+from .views import GeeksList
+
+{% for object in object_list %}
+    <!-- Display Objects -->
+    <li>{{ object.title }}</li>
+    <li>{{ object.description }}</li>
+   
+    <hr/>
+    <!-- If object_list is empty  -->
+    {% empty %}
+    <li>No objects yet.</li>
+    
+{% endfor %}
+
+
+path('<pk>/', GeeksDetailView.as_view()),
+    
+def book_detail_view(request, primary_key):
+    try:
+        book = Book.objects.get(pk=primary_key)
+    except Book.DoesNotExist:
+        raise Http404('Book does not exist')
+
+    return render(request, 'catalog/book_detail.html', context={'book': book})
+    
+    
+<h1>{{ object.title }}</h1>
+<p>{{ object.description }}</p>
+<p>{{ category }}</p>    
+
+
+{% block pagination %}
+    {% if is_paginated %}
+        <div class="pagination">
+            <span class="page-links">
+                {% if page_obj.has_previous %}
+                    <a href="{{ request.path }}?page={{ page_obj.previous_page_number }}">previous</a>
+                {% endif %}
+                <span class="page-current">
+                    Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+                </span>
+                {% if page_obj.has_next %}
+                    <a href="{{ request.path }}?page={{ page_obj.next_page_number }}">next</a>
+                {% endif %}
+            </span>
+        </div>
+    {% endif %}
+  {% endblock %}
+
+
+Model Meta is basically the inner class of your model class, used to change the behavior of your model fields. 
+class student(models.Model):
+    class Meta:
+	abstract = True
+        app_label = 'myapp' # add app name here
+        ordering = [-1]
+        permissions = []  ##Extra permissions when creating this object. Add, change, delete and view permissions are automatically created for each model.
+         db_table = 'X'  #overwrite the table name
+        
+        
+A proxy model is just another class that provides a different interface for the same underlying database model.
+A proxy model is a subclass of a database-table defining model,A proxy model doesn’t get its own database table. Instead it operates on the original table.
+
+If we are using success_url in CBV we have to use reverse_lazy().
+If we are reversing inside a function we can use reverse().
+
+
+@classmethod involve the class's attribute in some way
+@staticmethod is used as Utility regardless of Class
+
+
+
+To enforce permissions in class-based views, you can use the PermissionRequiredMixin from django.contrib.auth.mixins like so:
+
+from django.contrib.auth.mixins import PermissionRequiredMixin
+from django.views.generic import ListView
+
+class PostListView(PermissionRequiredMixin, ListView):
+    permission_required = ("blog.view_post", "blog.add_post")
+    template_name = "post.html"
+    model = Post
+
+from django.contrib.auth.decorators import permission_required
+
+@permission_required("blog.view_post")
+def post_list_view(request):
+    return HttpResponse()
+
+from django.utils.decorators import method_decorator
+
+@method_decorator([login_required, student_required], name='dispatch')
+class AnswerAssignment(CreateView):
+
+You can also check for permissions in your Django templates. 
+a perms variable is available by default when you render your template. 
+The perms variable actually contains all permissions in your Django application.
+
+{% if perms.blog.view_post %}
+  {# Your content here #}
+{% endif %}
+
+https://testdriven.io/blog/django-permissions/
+
+
+content_type = ContentType.objects.get_for_model(Post)
+post_permission = Permission.objects.filter(content_type=content_type)
+print([perm.codename for perm in post_permission])
+# => ['add_post', 'change_post', 'delete_post', 'view_post']
+for perm in post_permission:
+    user.user_permissions.add(perm)
+
+permission = Permission.objects.create(codename='can_publish',
+                                       name='Can Publish Posts',  # verbose human-readable name
+                                       content_type=content_type)
+
+New groups can be created with any name:
+
+from django.contrib.auth.models import Group
+
+Group.objects.create(name="Read only")
+Group.objects.create(name="Maintainer")
+
+maintainers = Group.objects.get(name='Maintainer')
+maintainer.user_set.add(user)
+
+maitainers.permissions.add(permission)
+
+user.get_group_permissions() 
+user.get_user_permissions() 
