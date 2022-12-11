@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+<div class="d-flex align-items-center justify-content-center container">
+    <div class="row">
+        <div class="col-6">
+            <h2>Auto dealer</h2>
+            <p>
+                The best place to find your car
+            </p>
+        </div>
+        <div class="col-6">
+            <form method="POST">
+                {% csrf_token %}
+                <table>
+                    {{ car_filter.form |crispy }}
+                </table>
+                <button type="submit" class="btn btn-primary">
+                    Search
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+<p class="text-center">-----------------------------------------------------</p>
+<div class="d-flex align-items-center justify-content-center container">
+    <div class="row">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Brand</th>
+                    <th>Transmission</th>
+                    <th>Mileage</th>
+                    <th>Color</th>
+                    <th>Year</th>
+                    <th>Price</th>
+                    <th>Decription</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for u in car_filter.qs %}
+                <tr>
+                    <td>{{ u.brand }}</td>
+                    <td>{{ u.trans_type }}</td>
+                    <td>{{ u.mileage }}</td>
+                    <td>{{ u.color }}</td>
+                    <td>{{ u.year }}</td>
+                    <td>{{ u.price }}</td>
+                    <td>{{ u.description }}</td>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5">No data</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+</div>
+
+{% endblock %}

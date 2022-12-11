@@ -30,7 +30,7 @@ DEBUG = True
 ALLOWED_HOSTS = []
 
 AUTHENTICATION_BACKENDS = (
-    "myApp.authentication.LDAPBackend",
+    # "myApp.authentication.LDAPBackend",
     # "django_python3_ldap.auth.LDAPBackend",
     "django.contrib.auth.backends.ModelBackend",
 )
@@ -105,7 +105,8 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
 
     'bootstrap4',
-
+    'crispy_forms',
+    'django_filters',
     'django_python3_ldap',
     'myApp.apps.MyappConfig',
 ]
@@ -134,6 +135,11 @@ TEMPLATES = [
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
             ],
+
+            'libraries':{
+                'my_tags': 'templatetags.my_tags',
+            }
+
         },
     },
 ]

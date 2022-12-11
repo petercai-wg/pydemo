@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+{# Load the tag library #}
+{% load bootstrap4 %}
+
+{# Load CSS and JavaScript #}
+{% bootstrap_css %}
+{% bootstrap_javascript jquery='full' %}
+
+{# Display django.contrib.messages as Bootstrap alerts #}
+{% bootstrap_messages %}
+
+<head>
+    <meta charset="utf-8">
+    <title>Basic contact form</title>
+</head>
+
+<body>
+    <div class="container w-100">
+        <div class="col-6">
+            <form method="post" class="form">
+                <!--add attribute novalidate to by pass clientside validation -->
+                {% csrf_token %}
+
+                {% if form.field_errors %}
+                <ul>
+                    {% for error in form.field_errors %}
+                    <li>form.field_errors : {{ error }}</li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+
+
+                <div class="table-responsive">
+                    <table border="1" class="table">
+                        <tr>
+                            <th>{{ form.name.label_tag }}</th>
+                            <td>
+                                {{ form.name.errors }}
+                                {{ form.name }}
+                                {{ form.name.help_text }}
+                                {{ form.errors.name }}
+
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <th>{{ form.email.label_tag }}</th>
+                            <td>
+                                {{ form.email.errors }}
+                                {{ form.email }}
+                                {{ form.errors.email }}
+                            </td>
+                        </tr>
+
+                        <th>{{ form.password.label_tag }}</th>
+                        <td>
+                            {{ form.password }}
+                        </td>
+                        </tr>
+
+                        <tr>
+                            <th>{{ form.message.label_tag }}</th>
+                            <td>
+                                {{ form.message.errors }}
+                                {{ form.message }}
+                                <br />
+                                {{ form.message.help_text }}
+                            </td>
+                        </tr>
+
+                    </table>
+                </div>
+
+                <button class="btn btn-primary" type="submit">Submit</button>
+            </form>
+        </div>
+    </div>
+</body>
+
+</html>

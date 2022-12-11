@@ -11,4 +11,10 @@ urlpatterns = [
     path('dropdown/', views.example_dropdown, name='example_dropdown'),
 
     path('get_cities_ajax/', views.get_cities_ajax,     name='get_cities_ajax'),
+
+    path('basic_contact/', views.basic_contact,     name='basic_contact'),
+
+    path('search_user/', views.search_user, name='search_user'),
+    path('search_car/', views.search_car, name='search_car'),
+
 ]

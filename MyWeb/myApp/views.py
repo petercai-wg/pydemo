@@ -1,12 +1,17 @@
 from django.shortcuts import render
 from django.views.generic import ListView, CreateView, UpdateView
 from django.urls import reverse_lazy
-
-from .models import Person, City
-from .forms import PersonForm
-from collections import namedtuple
+from django.contrib.auth.models import User
 from django.http import JsonResponse
+
+
+from collections import namedtuple
+
 from .Util import getPropertiesList, getPropertiesJSONData
+from .models import Person, City, Car
+from .forms import PersonForm, ContactForm
+
+from .filters import UserFilter, CarListingFilter
 
 
 def example_dropdown(request):
@@ -53,3 +58,41 @@ def get_cities_ajax(request):
     cities = getPropertiesJSONData(subject_id)
     # return JsonResponse(list(cities.values('id', 'name')), safe=False)
     return JsonResponse(cities, safe=False)
+
+
+def basic_contact(request):
+    if request.method == 'POST':
+        form = ContactForm(request.POST)
+
+        print(form.data['name'] + " / " + form['password'].value())
+
+        if form.is_valid():
+            print(
+                "after form validate, form.cleaned_data['password'] " + " /  " + form.instance.message)
+        else:
+            print(form.errors)
+    else:
+        form = ContactForm()
+        # this won't take effect,
+        form.data['name'] = "peter"
+    return render(request, 'myApp/basic_contact.html', {'form': form})
+
+
+def search_user(request):
+    user_list = User.objects.all()
+    if request.method == 'POST':
+        user_filter = UserFilter(request.POST, queryset=user_list)
+    if request.method == 'GET':
+        user_filter = UserFilter(request.GET, queryset=user_list)
+
+    return render(request, 'myApp/user_list.html', {'filter': user_filter})
+
+
+def search_car(request):
+    car_list = Car.objects.all()
+    if request.method == 'POST':
+        car_filter = CarListingFilter(request.POST, queryset=car_list)
+    if request.method == 'GET':
+        car_filter = CarListingFilter(request.GET, queryset=car_list)
+
+    return render(request, 'myApp/car_list.html', {'car_filter': car_filter})
