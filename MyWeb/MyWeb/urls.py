@@ -18,9 +18,12 @@ from django.contrib.auth import views as auth_views
 from django.urls import include, path
 from django.views.generic.base import TemplateView
 
+handler404 = "corm.views.NotFound.error_404"
+
 urlpatterns = [
     path("admin/", admin.site.urls),
     path('myApp/', include('myApp.urls')),
+    path('corm/', include('corm.urls')),
 
     path('', TemplateView.as_view(template_name='home.html'), name='home'),
     path('login/', auth_views.LoginView.as_view(template_name='login.html'), name='login'),

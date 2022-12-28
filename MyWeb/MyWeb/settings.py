@@ -27,7 +27,7 @@ SECRET_KEY = "django-insecure-&h1tzn$*p*wkuu$gvbzr4r$(@v-o7y^%cu&#oz^6knz(gd229d
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
 
 AUTHENTICATION_BACKENDS = (
     # "myApp.authentication.LDAPBackend",
@@ -108,7 +108,12 @@ INSTALLED_APPS = [
     'crispy_forms',
     'django_filters',
     'django_python3_ldap',
+    'rest_framework',
+
+
     'myApp.apps.MyappConfig',
+    'corm',
+
 ]
 
 MIDDLEWARE = [
@@ -187,6 +192,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
 STATIC_URL = "static/"
+
+MEDIA = "media"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field

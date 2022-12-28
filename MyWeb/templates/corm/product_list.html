@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+
+{% block title %}
+Products - List
+{% endblock %}
+
+
+{% block content %}
+<div class="container">
+    <p>
+        <a href="{% url 'product-create' %}">Add Product</a>
+    </p>
+    <table>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Descripton</th>
+                <th>Price</th>
+                <th>Inventory</th>
+            </tr>
+        </thead>
+        <tbody>
+
+            {% for product in object_list %}
+            <tr>
+                <td><a href="{% url 'product-detail' product.pk %}">{{ product.title }}</a></td>
+                <td>{{ product.content|safe|escape }}</td>
+
+                <td>${{ product.price }}</td>
+
+
+                <td>{{ product.inventory }}</td>
+
+            </tr>
+            {% endfor %}
+        </tbody>
+
+    </table>
+</div>
+
+{% endblock %}

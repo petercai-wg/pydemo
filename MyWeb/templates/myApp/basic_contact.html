@@ -65,6 +65,9 @@
                                 {{ form.message.errors }}
                                 {{ form.message }}
                                 <br />
+   							    {% for err in form.message.errors %}
+									<small class="text-danger ml-2">{{ err }}</small><br>
+								{% endfor %}
                                 {{ form.message.help_text }}
                             </td>
                         </tr>
