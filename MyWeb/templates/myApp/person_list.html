@@ -3,13 +3,14 @@
 {% block title %}Human Resources Module{% endblock %}
 
 {% block content %}
-  <h2>Human Resources Module » People Management</h2>
+<div class="container-fluid">
+  <h2 class="center">Human Resources Module » People Management</h2>
 
   <p>
     <a href="{% url 'person_add' %}">Add person</a>
   </p>
 
-  <table border="1">
+  <table class="table">
     <thead>
       <tr>
         <th>Name</th>
@@ -20,18 +21,19 @@
     </thead>
     <tbody>
       {% for person in people %}
-        <tr>
-          <td><a href="{% url 'person_change' person.pk %}">{{ person.name }}</a></td>
-          <td>{{ person.birthdate }}</td>
-          <td>{{ person.country.name }}</td>
-          <td>{{ person.city.name }}</td>
-        </tr>
+      <tr>
+        <td><a href="{% url 'person_change' person.pk %}">{{ person.name }}</a></td>
+        <td>{{ person.birthdate }}</td>
+        <td>{{ person.country.name }}</td>
+        <td>{{ person.city.name }}</td>
+      </tr>
       {% empty %}
-        <tr>
-          <td colspan="4">No person in the database. <a href="{% url 'person_add' %}">Add the first person</a>.</td>
-        </tr>
+      <tr>
+        <td colspan="4">No person in the database. <a href="{% url 'person_add' %}">Add the first person</a>.</td>
+      </tr>
       {% endfor %}
     </tbody>
   </table>
+</div>
 
 {% endblock %}

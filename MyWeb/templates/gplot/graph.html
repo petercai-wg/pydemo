@@ -1,0 +1,45 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>test</title>
+
+    <style media="screen">
+        .gplot {
+            width: 500px;
+            height: 400px;
+        }
+    </style>
+
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+
+</head>
+
+<body>
+    {% autoescape off %}
+    <table style="width:80%;">
+        <tr>
+            <td>
+                <div class="gplot">
+                    {{ plot_div }}
+                </div>
+            </td>
+            <td>
+                <div id="chart2" class="gplot">
+            </td>
+
+        </tr>
+    </table>
+    {% endautoescape %}
+</body>
+
+<script type="text/javascript">
+    var graph1 = {{ plot_json| safe }}
+    Plotly.plot("chart2", graph1, {})
+
+
+</script>
+
+</html>

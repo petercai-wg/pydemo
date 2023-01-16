@@ -4,12 +4,21 @@
 
 {% block content %}
 
+<input type="hidden" id="download_file_id" name="download_file_name" value="{{ download_file }}">
+
 <div class="d-flex align-items-center justify-content-center">
     <div col-3>
         <form method="POST">
             {% csrf_token %}
             <div class="row">
-                <h4>Search Filter</h4>
+                <h5>Search Filter</h5>
+                <span>
+                    <div id="search-spinner" style="display:none" class="spinner-border text-primary" role="status">
+                        <span class="sr-only">Searching ....</span>
+
+                    </div>
+                </span>
+
             </div>
 
             <div>
@@ -33,9 +42,10 @@
                 </div>
 
                 <div class="row">
-                    <button type="submit" class="btn btn-primary">
-                        Search
-                    </button>
+                    <button id="submit-id" type="submit" class="btn btn-primary mr-5"
+                        onclick="return on_submit_click(this.id)"> Search </button>
+
+                    <button class="btn btn-primary mr-1" onclick="return myfiledownload(event)">Download</button>
 
                 </div>
 
@@ -88,5 +98,38 @@
     </div>
 
 </div>
+
+<script type="text/javascript">
+    window.onload = function check_download() {
+        var b = document.getElementById("download_file_id")
+        if (b.value == "Y")
+            window.location.href = "{% url 'download_file' %}"
+
+    }
+
+
+    function on_submit_click(current_id) {
+        var answer = confirm("Sure ?")
+        if (answer) {
+            var b = document.getElementById(current_id)
+            b.style.display = "none"
+
+            var spinner = document.getElementById("search-spinner")
+            spinner.style.display = "inline-flex"
+        }
+
+        return answer
+
+    }
+
+    function myfiledownload(event) {
+        event.stopPropagation()
+        window.location.href = "{% url 'download_file' %}"
+        return false
+    }
+
+</script>
+
+
 
 {% endblock %}
