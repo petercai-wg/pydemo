@@ -1,0 +1,197 @@
+{% extends 'base.html' %}
+
+
+
+{% load my_tags %}
+
+{% block content %}
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+
+
+<form method="POST" id="changelist-form">
+    <input type="hidden" name="form-action" id="changelist-form-action" value="">
+    <input type="hidden" name="h-group-users" id="h-group-users-id" value="">
+    <input type="hidden" name="h-users" id="h-users-id" value="">
+
+
+    {% csrf_token %}
+
+    <div class="d-flex flex-row justify-content-center m-4" style="width:60%">
+
+        <div class="card col-5">
+            <div class="card-body">
+                <div class="row">
+                    <div class="input-group m-1 p-1">
+                        <span class="m-1 p-1">Users</span>
+                        <input type="text" class="form-control" placeholder="Search..." name="q" value="{{ q }}"
+                            id="myInput" onkeyup="filterFunction()">
+                    </div>
+                </div>
+                <div class="row">
+                    <select class="form-control select_field_class" multiple="multiple" size="5" name="user_selected"
+                        onclick="on_user_selected_click()" id="user_selected_id">
+                        {% for u in users%}
+                        <option value="{{u.key}}">{{u.value}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+            </div>
+        </div>
+        <div class="align-self-center p-2" style="width:30px">
+
+            <i class="bi bi-arrow-right-circle" type="submit" onclick="return on_add_click()">
+            </i>
+            <br>
+            <i class="bi bi-arrow-left-circle" type="submit" onclick="return on_remove_click()">
+            </i>
+            <br>
+
+        </div>
+
+        <div class="card col-5">
+            <div class="card-body">
+                <div class="row m-2 p-1">Group :</div>
+
+                <div class="row">
+                    <select class="form-control select_field_class" multiple="multiple" size="5" name="group_selected"
+                        id="group_selected_id" onclick="on_group_selected_click()">
+                        {% for u in group_users %}
+                        <option value="{{u.key}}">{{u.value}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="align-self-end p-2" style="width:100px">
+
+            <button class="btn btn-primary" type="submit" onclick="return on_submit_click()">
+                Save</button>
+        </div>
+
+    </div>
+</form>
+
+
+<script type="text/javascript">
+    function on_submit_click() {
+        var selected = [];
+        for (var option of document.getElementById('group_selected_id').options) {
+            selected.push(option.value);
+        }
+        alert(selected)
+        return false;
+    }
+
+
+
+
+
+
+    function on_user_selected_click() {
+
+        var selected = [];
+        for (var option of document.getElementById('user_selected_id').options) {
+            if (option.selected) {
+                selected.push(option.value);
+            }
+        }
+        document.getElementById('h-users-id').value = selected
+
+    }
+
+    function on_group_selected_click() {
+
+        var selected = [];
+        for (var option of document.getElementById('group_selected_id').options) {
+            if (option.selected) {
+                selected.push(option.value);
+            }
+        }
+        document.getElementById('h-group-users-id').value = selected
+
+    }
+
+
+
+    function filterFunction() {
+        var input, filter, ul, li, a, i;
+        input = document.getElementById("myInput");
+        filter = input.value.toUpperCase();
+        div = document.getElementById("user_selected_id");
+        a = div.getElementsByTagName("option");
+        for (i = 0; i < a.length; i++) {
+            txtValue = a[i].textContent || a[i].innerText;
+            if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                a[i].style.display = "";
+            } else {
+                a[i].style.display = "none";
+            }
+        }
+    }
+
+    function on_add_click() {
+        var a = document.getElementById("changelist-form-action")
+        a.value = "ADD"
+
+        var b = document.getElementById("h-users-id").value
+
+        var c = b.split(',');
+
+        var groupselect = document.getElementById("group_selected_id");
+        var selectobject = document.getElementById("user_selected_id");
+        for (var i = 0; i < selectobject.length; i++) {
+            let s = selectobject.options[i].value
+            if (c.includes(s)) {
+                let option = new Option(s, s);
+                groupselect.add(option, undefined);
+                selectobject.remove(i);
+                i--;
+            }
+        }
+
+        $("#user_selected_id").html($("#user_selected_id option").sort(function (a, b) {
+            return a.text == b.text ? 0 : a.text.toLowerCase() < b.text.toLowerCase() ? -1 : 1
+        }))
+
+        $("#group_selected_id").html($("#group_selected_id option").sort(function (a, b) {
+            return a.text == b.text ? 0 : a.text.toLowerCase() < b.text.toLowerCase() ? -1 : 1
+        }))
+    }
+
+    function on_remove_click() {
+        var a = document.getElementById("changelist-form-action")
+        a.value = "REMOVE"
+        var b = document.getElementById("h-group-users-id").value
+
+        var c = b.split(',');
+
+        var userselect = document.getElementById("user_selected_id");
+        var selectobject = document.getElementById("group_selected_id");
+        for (var i = 0; i < selectobject.length; i++) {
+            let s = selectobject.options[i].value
+            if (c.includes(s)) {
+                let option = new Option(s, s);
+                userselect.add(option, undefined);
+                selectobject.remove(i);
+                i--;
+            }
+        }
+        // resort the dropdown
+        $("#user_selected_id").html($("#user_selected_id option").sort(function (a, b) {
+            return a.text == b.text ? 0 : a.text.toLowerCase() < b.text.toLowerCase() ? -1 : 1
+        }))
+
+        $("#group_selected_id").html($("#group_selected_id option").sort(function (a, b) {
+            return a.text == b.text ? 0 : a.text.toLowerCase() < b.text.toLowerCase() ? -1 : 1
+        }))
+    }
+
+</script>
+
+{% endblock %}

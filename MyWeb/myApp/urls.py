@@ -16,5 +16,8 @@ urlpatterns = [
 
     path('search_user/', views.search_user, name='search_user'),
     path('search_car/', views.search_car, name='search_car'),
+    path('download_file/', views.download_file, name='download_file'),
+
+    path('group_user/', views.group_user, name='group_user'),
 
 ]
