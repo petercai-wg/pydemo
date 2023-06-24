@@ -32,7 +32,7 @@
                 </div>
                 <div class="row">
                     <select class="form-control select_field_class" multiple="multiple" size="5" name="user_selected"
-                        onclick="on_user_selected_click()" id="user_selected_id">
+                        id="user_selected_id">
                         {% for u in users%}
                         <option value="{{u.key}}">{{u.value}}</option>
                         {% endfor %}
@@ -58,9 +58,9 @@
 
                 <div class="row">
                     <select class="form-control select_field_class" multiple="multiple" size="5" name="group_selected"
-                        id="group_selected_id" onclick="on_group_selected_click()">
+                        id="group_selected_id" ">
                         {% for u in group_users %}
-                        <option value="{{u.key}}">{{u.value}}</option>
+                        <option value=" {{u.key}}">{{u.value}}</option>
                         {% endfor %}
                     </select>
                 </div>
@@ -89,36 +89,6 @@
     }
 
 
-
-
-
-
-    function on_user_selected_click() {
-
-        var selected = [];
-        for (var option of document.getElementById('user_selected_id').options) {
-            if (option.selected) {
-                selected.push(option.value);
-            }
-        }
-        document.getElementById('h-users-id').value = selected
-
-    }
-
-    function on_group_selected_click() {
-
-        var selected = [];
-        for (var option of document.getElementById('group_selected_id').options) {
-            if (option.selected) {
-                selected.push(option.value);
-            }
-        }
-        document.getElementById('h-group-users-id').value = selected
-
-    }
-
-
-
     function filterFunction() {
         var input, filter, ul, li, a, i;
         input = document.getElementById("myInput");
@@ -136,22 +106,22 @@
     }
 
     function on_add_click() {
-        var a = document.getElementById("changelist-form-action")
-        a.value = "ADD"
-
-        var b = document.getElementById("h-users-id").value
-
-        var c = b.split(',');
+        var a = document.getElementById("changelist-form-action");
+        a.value = "ADD";
 
         var groupselect = document.getElementById("group_selected_id");
+
         var selectobject = document.getElementById("user_selected_id");
+
         for (var i = 0; i < selectobject.length; i++) {
-            let s = selectobject.options[i].value
-            if (c.includes(s)) {
-                let option = new Option(s, s);
-                groupselect.add(option, undefined);
+            let option = selectobject.options[i];
+            if (option.selected) {
+                let s = option.value;
+                let new_option = new Option(s, s);
+                groupselect.add(new_option, undefined);
                 selectobject.remove(i);
                 i--;
+
             }
         }
 
@@ -167,21 +137,23 @@
     function on_remove_click() {
         var a = document.getElementById("changelist-form-action")
         a.value = "REMOVE"
-        var b = document.getElementById("h-group-users-id").value
-
-        var c = b.split(',');
 
         var userselect = document.getElementById("user_selected_id");
+
         var selectobject = document.getElementById("group_selected_id");
+
         for (var i = 0; i < selectobject.length; i++) {
-            let s = selectobject.options[i].value
-            if (c.includes(s)) {
-                let option = new Option(s, s);
-                userselect.add(option, undefined);
+            let option = selectobject.options[i];
+            if (option.selected) {
+                let s = option.value;
+                let new_option = new Option(s, s);
+                userselect.add(new_option, undefined);
                 selectobject.remove(i);
                 i--;
+
             }
         }
+
         // resort the dropdown
         $("#user_selected_id").html($("#user_selected_id option").sort(function (a, b) {
             return a.text == b.text ? 0 : a.text.toLowerCase() < b.text.toLowerCase() ? -1 : 1

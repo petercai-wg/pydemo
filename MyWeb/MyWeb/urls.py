@@ -24,6 +24,10 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path('myApp/', include('myApp.urls')),
     path('corm/', include('corm.urls')),
+    path('gplot/', include('gplot.urls')),
+    path('mychart/', include('mychart.urls')),
+    path('myDatable/', include('myDatable.urls')),
+    path('api/', include('api.urls')),
 
     path('', TemplateView.as_view(template_name='home.html'), name='home'),
     path('login/', auth_views.LoginView.as_view(template_name='login.html'), name='login'),

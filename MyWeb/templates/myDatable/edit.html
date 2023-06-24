@@ -1,0 +1,79 @@
+<!-- ADD Modal -->
+<div class="modal fade" id="editModal{{ employee.id }}" tabindex="-1" role="dialog" aria-labelledby="editModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addModalLabel">
+                    <i class="fas fa-plus"></i> Edit Employee
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <!-- Modal content-->
+            <div class="modal-body">
+
+
+                <div class="col-md-12">
+                    <form method="POST" class="post-form" action="{% url 'dt-update' employee.id %}">
+                        {% csrf_token %}
+                        <div class="container">
+                            <br>
+                            <div class="form-group row">
+                                <label class="col-sm-1 col-form-label"></label>
+                                <div class="col-sm-4">
+                                    <h3>Update Details</h3>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-4 col-form-label">Employee Id:</label>
+                                <div class="col-sm-8">
+                                    <input type="text" class="form-control" name="id" id="id_id" required maxlength="20"
+                                        value="{{ employee.id }}" />
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-4 col-form-label">Employee Name:</label>
+                                <div class="col-sm-8">
+                                    <input type="text" class="form-control" name="name" id="id_name" required
+                                        maxlength="100" value="{{ employee.name }}" />
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-4 col-form-label">Employee Email:</label>
+                                <div class="col-sm-8">
+                                    <input type="email" class="form-control" name="email" id="id_email" required
+                                        maxlength="254" value="{{ employee.email }}" />
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-4 col-form-label">Employee Contact:</label>
+                                <div class="col-sm-8">
+                                    <input type="text" class="form-control" name="contact" id="id_contact" required
+                                        maxlength="15" value="{{ employee.contact }}" />
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-1 col-form-label"></label>
+                                <div class="col-sm-4">
+                                    <button type="submit" class="btn btn-success btn-lg">Update</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+
+            <!-- END Modal content-->
+
+
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
