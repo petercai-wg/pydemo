@@ -1,0 +1,29 @@
+<div hx-target="this" class="mt-3 py-3 px-3 bg-white shadow border border-gray-100">
+
+    <p>
+    <h3>Name: {{ entry.name }}
+        Description : {{ entry.description1 }}
+        status : {{ entry.status }}
+    </h3>
+    <table>
+        <tr>
+            <td>Contact: {{ entry.contact }}</td>
+            <td rowspan="2" style="width: 25px; vertical-align: top;"> comment:
+                <textarea>  {{entry.comment1 }}</textarea>
+            </td>
+        </tr>
+        <tr>
+            <td>Region: {{entry.region}}</td>
+        </tr>
+    </table>
+
+    </p>
+    <div class="mt-2">
+        <button hx-get="{% url 'update-entry' entry.id %}" hx-swap="outerHTML">
+            Modify
+        </button>
+        <button hx-post="{% url 'delete-entry' entry.id %}" hx-swap="outerHTML swap:1s">
+            Delete
+        </button>
+    </div>
+</div>
