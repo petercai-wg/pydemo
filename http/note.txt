@@ -1,0 +1,51 @@
+ Static Python HTTP Server :  python3 -m http.server 8000 --bind 127.0.0.1
+ 
+ run secure HTTPs server:
+  
+create self-sign certificate:
+1. keytool -genkeypair -noprompt -alias self -keyalg RSA -keysize 2048 -sigalg SHA256withRSA  -validity 730 -keypass password -keystore privatekey.jks -storepass password -storetype JKS -dname "CN=localhost, OU=Unknown, O=Unknown, L=Toronto, ST=ON, C=CA" -ext SAN=dns:localhost,ip:127.0.0.1
+
+The JKS keystore uses a proprietary format. It is recommended to migrate to PKCS12 which is an industry standard format
+keytool -importkeystore -srckeystore privatekey.jks -destkeystore privatekey.jks -deststoretype pkcs12  
+
+### export private key
+openssl pkcs12 -in privatekey.jks -nodes -nocerts -out private.pem
+### export public key
+keytool -exportcert -alias self  -keypass password -keystore privatekey.jks -rfc -file public.pem
+
+
+####The certificate must be exported from each server and imported on the other server.     
+2. keytool -exportcert -noprompt -rfc -alias self -file hostname.crt -keystore privatekey.jks -storepass password -storetype JKS
+
+### create public certficate,  output public.perm = publiccert.pem  == host.crt
+openssl pkcs12 -in privatekey.jks -nokeys -out public.pem
+
+### Each server must trust its own self-signed certificate and the certificates of other servers. 
+##You can import a self-signed certificate into the trust store
+3.keytool -importcert -noprompt -alias hostname -file hostname.crt -keypass password -keystore trust.jks -storepass password -storetype JKS
+### or import to java trust store:  
+keytool -importkeystore -noprompt -srckeystore installdir/lib/security/cacerts -destkeystore trust.jks -deststoretype JKS -srcstorepass changeit -deststorepass password
+
+####  Export a Public Key Certificate from Java Key Store to Base 64 (PEM) Format, same as command 2,  output home.crt == publicccert.perm
+4. keytool -export -keystore privatekey.jks -alias self -file publiccert.cer
+   openssl x509 -inform der -in publiccert.cer -out publiccert.pem
+
+
+
+
+---------------------------------------------------------
+## generate public/private key pair
+1. openssl genrsa -out TestClient.key 2048 
+
+##export public key from TestClient.key pair
+2. openssl rsa -in TestClient.key -pubout -out TestClient_Public.key
+
+## create Certificate Sign Request
+3. openssl req -new -key TestClient.key -out TestClient.csr
+
+verify  openssl -req -text -in TestClient.csr -noout -verify
+
+## self sign
+4. openssl x509 -in TestClient.csr -out TestClient.crt -req -signkey TestClient.key -days 365
+
+
