@@ -1,0 +1,107 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+Movie Collection Datatable
+{% endblock %}
+
+{% block style%}
+
+<link href="https://cdn.datatables.net/v/bs4/dt-1.13.3/datatables.min.css" rel="stylesheet" />
+
+<script src="https://cdn.datatables.net/v/bs4/dt-1.13.3/datatables.min.js"></script>
+
+<script src="https://unpkg.com/htmx.org@1.6.1/dist/htmx.min.js"></script>
+
+{% endblock %}
+
+
+
+{% block content %}
+
+
+<div class="container">
+    <div class="px-5 my-5 text-center">
+        <h1>My Movie Collection</h1>
+    </div>
+    <button hx-get="{% url 'add_movie' %}" hx-target="#dialog" class="btn btn-primary">
+        Add a movie
+    </button>
+
+    <div class="card">
+        <div class="card-body">
+            <table id="data-grid" class="table table-sriped table-bordered">
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Year</th>
+                        <th>Rating</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+                <tfoot></tfoot>
+            </table>
+        </div>
+    </div>
+
+</div>
+
+<!-- Placeholder for the modal -->
+<div id="modal" class="modal fade">
+    <div id="dialog" class="modal-dialog" hx-target="this"></div>
+</div>
+
+<!-- Empty toast to show the message -->
+<div class="p-3" style="position: fixed; top: 0; right:0;">
+    <div id="toast" class="toast align-items-center text-white bg-success border-0">
+        <div class="d-flex">
+            <div id="toast-body" class="toast-body"></div>
+            <button type="button" class="close m-2" data-dismiss="toast" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    </div>
+</div>
+<!-- My javascript for this page to handle datatable -->
+<script>
+    var dataset = {{ table_data | safe}}
+    console.log(dataset)
+
+
+    var movieTable = $('#data-grid').DataTable({
+        data: dataset,
+        columns: [
+            {
+                data: "title",
+            },
+            {
+                data: "year",
+            },
+            {
+                data: "rating",
+            },
+            {
+                data: "id",
+                render: function (data, type, row) {
+                    return "<button class='btn btn-primary' hx-get='/mydtmx/movies/edit/" + row.id + "' hx-target='#dialog' title='Update'>Edit</button>"
+                }
+            }
+        ],
+        // Use DataTables' initComplete callback to tell htmx to reprocess any htmx attributes in the table
+        // DataTables docs: https://datatables.net/reference/option/initComplete
+        // htmx docs: https://htmx.org/api/#process AND https://htmx.org/docs/#3rd-party
+        initComplete: function (settings, json) {
+
+        },
+    });
+    ///  end of  DataTable function
+
+
+</script>
+
+<script src="{% static 'js/modalog.js' %}"></script>
+
+
+
+{% endblock %}
