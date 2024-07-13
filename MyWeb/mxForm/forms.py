@@ -2,6 +2,12 @@ from django import forms
 from .models import FundRation
 
 
+class MyForm(forms.Form):
+    name = forms.CharField(max_length=100)
+    pct = forms.IntegerField()
+    comment = forms.CharField(max_length=100)
+
+
 class FundForm(forms.ModelForm):
     class Meta:
         model = FundRation

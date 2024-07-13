@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block title %}
+Django HTMX Dynamic form creation and submit
+{% endblock %}
+
+{% block style%}
+<script src="https://unpkg.com/htmx.org@1.9.2/dist/htmx.min.js"></script>
+{% endblock %}
+
+
+{% block content %}
+<div class="container">
+    <div class="px-5 my-5 text-center">
+        <h1>Fund allocation ration myForm submit</h1>
+    </div>
+    <form method="POST" action="{% url 'myForm-save' %}">
+        {% csrf_token %}
+        <div>
+            <label for="fundname"> FundName</label>
+            <input name="fundname" type="text" value="{{fundname}}"></input>
+        </div>
+        <div id="partial-form">
+            {% for form in forms %}
+
+            {% include "mxForm/mypartialForm.html" %}
+            {% endfor %}
+        </div>
+        <div>
+            <button type="button" class="btn btn-success" type="submit" hx-get="{% url 'create-mypartialform' %}"
+                hx-target="#partial-form" hx-swap="beforeend">+ Add Row</button>
+
+            <button class="btn btn-primary" type="submit" id="submit-all">Submit</button>
+
+        </div>
+
+    </Form>
+</div>
+
+{% endblock %}

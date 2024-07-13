@@ -25,7 +25,7 @@ Movie List with Bootstrap5/HTMX/Modal
         <th>Title</th>
         <th>Year</th>
         <th>Rating</th>
-        <th></th>
+
       </tr>
     </thead>
     <tbody hx-trigger="load, movieListChanged from:body" hx-get="{% url 'movie_list' %}" hx-target="this">

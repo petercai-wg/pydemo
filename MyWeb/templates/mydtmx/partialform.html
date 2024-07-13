@@ -1,0 +1,7 @@
+<form hx-target="this" hx-swap="innerHTML">
+    <div class="row">
+        <label for="comment"> Comment</label>
+        <input name="comment" type="text"></input>
+        <button type="button" class="btn btn-danger" hx-on="click: this.closest('form').remove()">remove</button>
+    </div>
+</form>

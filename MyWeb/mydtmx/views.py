@@ -53,7 +53,7 @@ def movie_dt_ajax_data(request):
                 break
         except Exception:
             print(f"There is no draw in the input key, {key} ")
-
+    # for serverside = True
     print(f"movie_dt_ajax_data ... {request.GET}, {draw}")
 
     data = Movie.objects.all().values()
@@ -73,7 +73,7 @@ def index(request):
 
 
 def movie_list(request):
-    print("Movie_list ...")
+    print("Movie_list ...to movie_list.html")
     # time.sleep(5)
     return render(
         request,
@@ -112,9 +112,16 @@ def add_movie(request):
     )
 
 
+def edit_movie_addcomment(request):
+    print("GET edit_movie_addcomment")
+    if request.method == "GET":
+        return render(request, "mydtmx/partialform.html")
+
+
 def edit_movie(request, pk):
     movie = get_object_or_404(Movie, pk=pk)
     if request.method == "POST":
+        print(f"edit_movie {request.POST}")
         form = MovieForm(request.POST, instance=movie)
         if form.is_valid():
             form.save()
@@ -131,6 +138,8 @@ def edit_movie(request, pk):
             )
     else:
         form = MovieForm(instance=movie)
+
+    print("edit_movie send to movie_form.html")
     return render(
         request,
         "mydtmx/movie_form.html",

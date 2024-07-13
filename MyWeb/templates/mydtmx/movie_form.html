@@ -16,16 +16,19 @@
       {% render_field form.year class="form-control" placeholder="1980" %}
       <div class="invalid-feedback">{{ form.year.errors|first }}</div>
     </div>
-    <div class="form-group">
-      <label for="{{ form.rating.id_for_label }}">Rating</label>
-      {% render_field form.rating class="form-control" %}
-      <div class="invalid-feedback">{{ form.rating.errors|first }}</div>
+
+    <div id="partial-form">
     </div>
+
   </div>
   <div class="modal-footer">
     {% if movie %}
     <button type="button" class="btn btn-danger" hx-post="{% url 'remove_movie' pk=movie.pk %}">Remove</button>
     <span class="flex-grow-1"></span>
+
+    <button type="button" class="btn btn-success" type="submit" hx-get="{% url 'create-row-comment' %}"
+      hx-target="#partial-form" hx-swap="beforeend">+ Add Row</button>
+
     {% endif %}
     <button type="button" class="btn btn-secondary" data-dismiss="modal">
       Cancel

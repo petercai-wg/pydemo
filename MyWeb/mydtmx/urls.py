@@ -17,4 +17,5 @@ urlpatterns = [
     path("movies/add", views.add_movie, name="add_movie"),
     path("movies/remove/<int:pk>", views.remove_movie, name="remove_movie"),
     path("movies/edit/<int:pk>", views.edit_movie, name="edit_movie"),
+    path("movies/edit/addrow", views.edit_movie_addcomment, name="create-row-comment"),
 ]
