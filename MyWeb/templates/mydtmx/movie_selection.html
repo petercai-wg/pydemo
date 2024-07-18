@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block title %}
+Movie List with Bootstrap4/HTMX/Modal
+{% endblock %}
+
+{% block style%}
+<script src="https://unpkg.com/htmx.org@1.6.1/dist/htmx.min.js"></script>
+{% endblock %}
+
+
+{% block content %}
+<div class="container">
+    <div class="px-5 my-5 text-center">
+        <h1>My Movie selection</h1>
+    </div>
+    <div>
+        <select name="year" hx-get="{% url 'movie_title' %}" hx-trigger="change" hx-target="#id_movies">
+            {% for m in movie_years %}
+            <option value="{{ m.year}}">{{ m.year}}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <div id="id_movies">
+    </div>
+
+    {% endblock %}

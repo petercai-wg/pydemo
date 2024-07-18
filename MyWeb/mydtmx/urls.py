@@ -18,4 +18,6 @@ urlpatterns = [
     path("movies/remove/<int:pk>", views.remove_movie, name="remove_movie"),
     path("movies/edit/<int:pk>", views.edit_movie, name="edit_movie"),
     path("movies/edit/addrow", views.edit_movie_addcomment, name="create-row-comment"),
+    path("movie_year", views.movie_year, name="movie_year"),
+    path("movie_title", views.movie_title, name="movie_title"),
 ]

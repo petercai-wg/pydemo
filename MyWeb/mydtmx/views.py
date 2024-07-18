@@ -162,3 +162,22 @@ def remove_movie(request, pk):
             )
         },
     )
+
+
+def movie_year(request):
+    print("movie_year ...to movie_selection.html")
+
+    return render(
+        request,
+        "mydtmx/movie_selection.html",
+        {
+            "movie_years": Movie.objects.all(),
+        },
+    )
+
+
+def movie_title(request):
+    year = request.GET.get("year")
+    print(f"movie_title ...for {year} to movie_selection.html")
+    movies = Movie.objects.filter(year=year)
+    return render(request, "mydtmx/movie_list.html", {"movies": movies})
