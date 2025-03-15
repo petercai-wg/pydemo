@@ -3,10 +3,43 @@
 
 {% block title %}Home{% endblock %}
 
+
+{% block style %}
+
+
+{% endblock %}
+
+
 {% block content %}
 {% if user.is_authenticated %}
 Hi {{ user.username }}!
 <p><a href="{% url 'logout' %}">Log Out</a></p>
+<form method="post" action="{% url 'logout' %}">
+    {% csrf_token %}
+    <button type="submit">Sign Out</button>
+</form>
+
+
+<script>
+
+    const roomName = "{{ request.user.username }}";
+    const chatSocket = new WebSocket(
+        'ws://' +
+        window.location.host +
+        '/ws/chat/' +
+        roomName +
+        '/'
+    );
+
+    chatSocket.onmessage = function (e) {
+        const data = JSON.parse(e.data);
+        console.log(data);
+        window.location.href = "http://" + window.location.host + "/logout";
+    }
+
+</script>
+
+
 {% else %}
 <p>You are not logged in</p>
 <a href="{% url 'login' %}">Log In</a>

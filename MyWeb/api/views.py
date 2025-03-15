@@ -5,6 +5,12 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import status
+from django.shortcuts import render
+
+
+def chatroom(request, room_name):
+    print(f"chatroom to {room_name}")
+    return render(request, "chatroom.html", {"room_name": room_name})
 
 
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
@@ -13,7 +19,7 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
         token = super().get_token(user)
 
         print("Add custom claims")
-        token['username'] = user.username
+        token["username"] = user.username
 
         return token
 
@@ -22,9 +28,11 @@ class MyTokenObtainPairView(TokenObtainPairView):
     serializer_class = MyTokenObtainPairSerializer
 
 
-@api_view(['GET'])
+@api_view(["GET"])
 @permission_classes([IsAuthenticated])
 def getUserAccess(request):
     user = request.user
 
-    return Response({"status": "success", "user": user.username}, status=status.HTTP_200_OK)
+    return Response(
+        {"status": "success", "user": user.username}, status=status.HTTP_200_OK
+    )
